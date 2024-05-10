@@ -1,0 +1,12 @@
+name: 'Trigger Renovate'
+description: 'Trigger a Renovate run for a repository with the Dependency Dashboard enabled.'
+inputs:
+  renovate-repository:
+    description: 'The repository to trigger a renovate run for. Needs the Dependency Dashboard enabled.'
+    required: true
+  token:
+    description: 'The GitHub token to use'
+    required: true
+runs:
+  using: 'node20'
+  main: 'index.js'
