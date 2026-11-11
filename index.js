@@ -14,21 +14,23 @@ try {
     'X-GitHub-Api-Version': '2022-11-28'
   }
 
-  // Get all issues
-  const { data } = await octokit.request('GET /repos/{owner}/{repo}/issues', {
+  let dependencyDashboardIssueNumber
+  for await (const { data } of octokit.paginate.iterator('GET /repos/{owner}/{repo}/issues', {
     owner,
     repo,
+    state: 'open',
+    per_page: 100,
     headers
-  })
-
-  // Find the Dependency Dashboard issue
-  var dependencyDashboardIssueNumber = null
-  for (const issue of data) {
-    var i = data.find(issue => issue.title === 'Dependency Dashboard')
-    if (i) {
-      dependencyDashboardIssueNumber = i.number
+  })) {
+    const issue = data.find(issue => issue.title === 'Dependency Dashboard' && !issue.pull_request)
+    if (issue) {
+      dependencyDashboardIssueNumber = issue.number
       break
     }
+  }
+
+  if (dependencyDashboardIssueNumber === undefined) {
+    throw new Error(`Open Dependency Dashboard issue not found in ${owner}/${repo}.`)
   }
 
   // Get the Dependency Dashboard issue
@@ -39,12 +41,22 @@ try {
     headers
   })
 
+  if (dependencyDashboardIssue.state !== 'open' || dependencyDashboardIssue.title !== 'Dependency Dashboard') {
+    throw new Error(`Issue #${dependencyDashboardIssueNumber} is no longer an open Dependency Dashboard in ${owner}/${repo}.`)
+  }
+  if (typeof dependencyDashboardIssue.body !== 'string') {
+    throw new Error(`Dependency Dashboard issue #${dependencyDashboardIssueNumber} in ${owner}/${repo} has no body.`)
+  }
+
   // Replace the checkBoxLine string in the issue body
   const checkBoxLine = "[ ] <!-- manual job -->Check this box to trigger a request for Renovate to run again on this repository"
   const checkBoxLineReplacement = checkBoxLine.replace('[ ]', '[x]')
   if (dependencyDashboardIssue.body.includes(checkBoxLineReplacement)) {
     console.log('INFO: The checkbox is already checked. Exiting.')
     process.exit(0)
+  }
+  if (!dependencyDashboardIssue.body.includes(checkBoxLine)) {
+    throw new Error(`Renovate manual trigger checkbox not found in ${owner}/${repo}#${dependencyDashboardIssueNumber}.`)
   }
   const newBody = dependencyDashboardIssue.body.replace(checkBoxLine, checkBoxLineReplacement)
 
