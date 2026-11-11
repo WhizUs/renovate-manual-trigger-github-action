@@ -18,7 +18,7 @@ workflow runs in, use a token with access to that repository.
 ```yaml
     steps:
       - name: Trigger Renovate
-        uses: WhizUs/renovate-manual-trigger-github-action@v0.1.0
+        uses: WhizUs/renovate-manual-trigger-github-action@v0.2.0
         with:
           token: ${{ secrets.ACCESS_TOKEN }}
           renovate-repository: org/repo
@@ -30,8 +30,12 @@ dashboard or checkbox cannot be found, the action fails with an error.
 
 ## Development
 
-Run the tests with Node.js 20 or later:
+Run the tests with Node.js 24 or later:
 
 ```sh
 npm test
 ```
+
+## License
+
+[MIT](LICENSE)
