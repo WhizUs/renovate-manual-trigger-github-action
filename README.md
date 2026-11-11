@@ -30,11 +30,17 @@ dashboard or checkbox cannot be found, the action fails with an error.
 
 ## Development
 
-Run the tests with Node.js 24 or later:
+The action runs from a single bundled file, `dist/index.js`, built with Rollup
+from `src/index.js`. `node_modules` is not committed. After changing the source
+or dependencies, rebuild and commit `dist/`:
 
 ```sh
+npm ci
+npm run build
 npm test
 ```
+
+CI fails if the committed `dist/` does not match a fresh build.
 
 ## License
 

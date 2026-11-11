@@ -1,2 +1,4 @@
-# node_modules is vendored for the action runtime; never ignore build output inside it
+node_modules/
+
+# dist/ holds the committed action bundle; override global ignores for it
 !dist/

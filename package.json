@@ -2,8 +2,9 @@
   "name": "renovate-manual-trigger-github-action",
   "version": "0.2.0",
   "description": "Trigger a Renovate run via the Dependency Dashboard manual-run checkbox",
-  "main": "index.js",
+  "main": "dist/index.js",
   "scripts": {
+    "build": "rollup --config rollup.config.js",
     "test": "node --test test/action.test.js"
   },
   "type": "module",
@@ -15,5 +16,11 @@
   },
   "engines": {
     "node": ">=24"
+  },
+  "devDependencies": {
+    "@rollup/plugin-commonjs": "^29.0.3",
+    "@rollup/plugin-json": "^6.1.0",
+    "@rollup/plugin-node-resolve": "^16.0.3",
+    "rollup": "^4.68.2"
   }
 }

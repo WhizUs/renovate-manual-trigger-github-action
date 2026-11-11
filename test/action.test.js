@@ -5,7 +5,7 @@ import { createServer } from 'node:http';
 import test from 'node:test';
 import { fileURLToPath } from 'node:url';
 
-const actionPath = fileURLToPath(new URL('../index.js', import.meta.url));
+const actionPath = fileURLToPath(new URL('../dist/index.js', import.meta.url));
 const actionDirectory = fileURLToPath(new URL('..', import.meta.url));
 const issuesPath = '/repos/example/project/issues';
 const dashboardTitle = 'Dependency Dashboard';
