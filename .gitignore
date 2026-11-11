@@ -1,0 +1,4 @@
+node_modules/
+
+# dist/ holds the committed action bundle; override global ignores for it
+!dist/
