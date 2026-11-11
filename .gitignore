@@ -1,0 +1,2 @@
+# node_modules is vendored for the action runtime; never ignore build output inside it
+!dist/
